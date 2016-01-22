@@ -70,7 +70,105 @@ Board, p1, p2, p3, p4= build_square_matrix(board_size, offset)
 
 
 ##Game Elements
+def game_intro():
+    pygame.mixer.music.load("Content/Rocky Theme Tune (8 Bit Remix).mp3")
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(1000,0)
+    gameDisplay.fill(white)
+    bg = pygame.image.load("Content/boxing glove 2.jpg")
+    ab = pygame.image.load("Content/boxing glove.jpg")
 
+    bg = pygame.transform.scale(bg, (400, 425))
+    ab = pygame.transform.scale(ab, (400, 425))
+
+    gameDisplay.blit(bg, (475, 150))
+    gameDisplay.blit(ab, (125, 150))
+
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+
+        largeText = pygame.font.SysFont("felixtitling",115)
+        TextSurf, TextRect = text_objects("Survivor", largeText)
+        TextRect.center = ((display_width/2),(display_height/10))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Start Game",25,600,150,50,green,bright_green,game_loop)
+        st = pygame.image.load("Content/start game button.png")
+        st = pygame.transform.scale(st, (150, 50))
+        gameDisplay.blit(st, (25, 600))
+
+        button("Quit Game",825,600,150,50,red,bright_red,quitgame)
+        quit = pygame.image.load("Content/quit button.png")
+        quit = pygame.transform.scale(quit, (150, 50))
+        gameDisplay.blit(quit, (825, 600))
+
+        button("Help",560,600,150,50,green,bright_green,help_loop)
+        hel = pygame.image.load("Content/help button.png")
+        hel = pygame.transform.scale(hel, (150, 50))
+        gameDisplay.blit(hel, (560, 600))
+
+        button("settings",290,600,150,50,green,bright_green,settings)
+        set = pygame.image.load("Content/settings button.png")
+        set = pygame.transform.scale(set, (150, 50))
+        gameDisplay.blit(set, (290, 600))
+
+
+        pygame.display.update()
+        clock.tick(15)
+def settings():
+    global pause
+    gameDisplay.fill(white)
+    largeText = pygame.font.SysFont("verdana",70)
+    TextSurf, TextRect = text_objects("settings", largeText)
+    TextRect.center = ((display_width/6),(display_height/10))
+    gameDisplay.blit(TextSurf, TextRect)
+
+
+    close_down = False
+
+
+    while not close_down:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+
+        button("back",25,500,150,50,green,bright_green,game_intro)
+        back = pygame.image.load("Content/back button.png")
+        back = pygame.transform.scale(back, (150, 50))
+        gameDisplay.blit(back, (25, 500))
+        button("player amount",25,150,150,50,white,white,)
+
+        button("2",320,150,75,50,red,white)
+        one = pygame.image.load("Content/1.png")
+        one = pygame.transform.scale(one, (75, 50))
+        gameDisplay.blit(one, (320, 150))
+
+        button("3",445,150,75,50,red,white)
+        two = pygame.image.load("Content/2.png")
+        two = pygame.transform.scale(two, (75, 50))
+        gameDisplay.blit(two, (445, 150))
+
+        button("4",570,150,75,50,red,white)
+        tri = pygame.image.load("Content/3.png")
+        tri = pygame.transform.scale(tri, (75, 50))
+        gameDisplay.blit(tri, (570, 150))
+
+        button("5",695,150,75,50,red,white)
+        fou = pygame.image.load("Content/4.png")
+        fou = pygame.transform.scale(fou, (75, 50))
+        gameDisplay.blit(fou, (695, 150))
+
+        pygame.display.update()
+        clock.tick(60)
 
 
 ##Loops
