@@ -553,3 +553,38 @@ def help_loop():
 
         pygame.display.update()
         clock.tick(60)
+        
+def game_loop():
+    global pause,loops,beurt,players
+    players=Turn_list(players)
+    beurt=players
+    loops=0
+    Reprint()
+    print_players(1,1,1,1)
+    pygame.display.flip()
+    gameExit = False
+    while not gameExit:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quitgame()
+                if event.key == pygame.K_h:
+                    help_loop()
+                    beurt = Turn_list(players)
+
+
+        # print(1)
+        Reprint()
+        button("Gooi dobbelsteen",40,720,200,140,red,green,Bewegen,beurt.Value,)
+        button("Stop beurt",280,720,200,140,red,green,Change_turn,beurt)
+        print_players(1,1,1,1)
+        pygame.display.update([camera1,camera2,camera3])
+        if loops == 5:
+            loops=0
+        clock.tick(60)
+
+Player_select(0)
+game_intro()
