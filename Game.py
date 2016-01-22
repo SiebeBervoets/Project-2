@@ -55,18 +55,194 @@ Board, p1, p2, p3, p4= build_square_matrix(board_size, offset)
 
 
 ## CONSTRUCTORS
+def quitgame():
+    pygame.quit()
+    quit()
+
+def unpause():
+    global pause
+    pause = False
+
+def paused():
+    global pause
+    largeText = pygame.font.SysFont("verdana",115)
+    TextSurf, TextRect = text_objects("Paused", largeText)
+    TextRect.center = ((display_width/2),(display_height/2))
+    canvas.blit(TextSurf, TextRect)
+    pause=True
+
+    while pause:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        #gameDisplay.fill(white)
 
 
+        button("Continue",150,450,100,50,green,bright_green,unpause)
+        button("Quit",550,450,100,50,red,bright_red,quitgame)
 
+        pygame.display.update()
+        Clock.tick(15)
+
+def button(msg,x,y,w,h,ic,ac,action=None,amount=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if (mouse[0]<x+w and mouse[0] > x) and (mouse[1]<y+h and mouse[1] > y):
+        pygame.draw.rect(canvas, ac,(x,y,w,h))
+        if click[0] == 1 and action != None:
+            if amount!=None:
+                action(amount)
+            else:
+                action()
+    else:
+        pygame.draw.rect(canvas, ic,(x,y,w,h))
+    smallText = pygame.font.SysFont("verdana",20)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    canvas.blit(textSurf, textRect)
 
 ##PRINTS
+def Reprint():
+    global loops
+    screen.fill(black)
+    Board.Reset(loops)
+    Board.Draw(screen)
+    canvas.fill((255,255,255),camera2)
+    canvas.fill((255,255,255),camera3)
+    canvas.fill((255,255,255),camera4)
+    loops+=1
 
+def Move_print(a, b, c, d):
+    player=beurt.Value
+    _width=int(34)
+    while a+b+c+d !=0:
+        if a>0:
+            a-=1
+            X_plus_move = _width
+            for i in range(_width*2-7):
+                   Reprint()
+                   if player.Kleur ==1:
+                       print_players(0,1,1,1)
+                   elif player.Kleur == 2:
+                       print_players(1,0,1,1)
+                   elif player.Kleur==3:
+                       print_players(1,1,0,1)
+                   elif player.Kleur==4:
+                       print_players(1,1,1,0)
+                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                                (X_plus_move + player.Locatie.Position.X * offset,
+                                 _width + player.Locatie.Position.Y * offset))
+                   X_plus_move+=1
+                   pygame.display.update(camera1)
+
+        elif b>0:
+            b-=1
+            Y_plus_move = _width
+            for i in range(_width*2-7):
+                   Reprint()
+                   if player.Kleur ==1:
+                       print_players(0,1,1,1)
+                   elif player.Kleur == 2:
+                       print_players(1,0,1,1)
+                   elif player.Kleur==3:
+                       print_players(1,1,0,1)
+                   elif player.Kleur==4:
+                       print_players(1,1,1,0)
+                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                                (_width + player.Locatie.Position.X * offset,
+                                Y_plus_move + player.Locatie.Position.Y * offset))
+                   Y_plus_move+=1
+                   pygame.display.update(camera1)
+        elif c>0:
+            c-=1
+            X_min_move = _width
+            for i in range(_width*2-7):
+                   Reprint()
+                   if player.Kleur ==1:
+                       print_players(0,1,1,1)
+                   elif player.Kleur == 2:
+                       print_players(1,0,1,1)
+                   elif player.Kleur==3:
+                       print_players(1,1,0,1)
+                   elif player.Kleur==4:
+                       print_players(1,1,1,0)
+                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                                (X_min_move + player.Locatie.Position.X * offset,
+                                _width + player.Locatie.Position.Y * offset))
+                   X_min_move-=1
+                   pygame.display.update(camera1)
+        elif d>0:
+            d-=1
+            Y_min_move = _width
+            for i in range(_width*2-7):
+                   Reprint()
+                   if player.Kleur ==1:
+                       print_players(0,1,1,1)
+                   elif player.Kleur == 2:
+                       print_players(1,0,1,1)
+                   elif player.Kleur==3:
+                       print_players(1,1,0,1)
+                   elif player.Kleur==4:
+                       print_players(1,1,1,0)
+                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                                (_width + player.Locatie.Position.X * offset,
+                                Y_min_move + player.Locatie.Position.Y * offset))
+                   Y_min_move-=1
+                   pygame.display.update(camera1)
+        Reprint()
+
+def print_players(x,y,z,a):
+    if x == 1:
+        player1.Value.draw(screen,offset)
+    if y == 1:
+        player2.Value.draw(screen,offset)
+    if z == 1:
+        player3.Value.draw(screen,offset)
+    if a == 1:
+        player4.Value.draw(screen,offset)
 
 
 
 ##Pre-Game
-
-
+def Player_select(aantal):
+    global players,player1,player2,player3,player4
+    players=Empty
+    for i in range(4):
+        if i == 0 and aantal > 0:
+            name="Player1"
+            players=Node(Player(name,1,p1,"Content/__pawn_blue.png"),players)
+            player1=players
+        elif i ==0 and aantal == 0:
+            players=Node(Player("CPU-1",1,p1,"Content/__pawn_blue.png"),players)
+            players.Value.Ai=True
+            player1=players
+        if i == 1 and aantal >1:
+            name="Player2"
+            players=Node(Player(name,2,p2,"Content/__pawn_yellow.png"),players)
+            player2=players
+        elif i==1 and aantal <=1:
+            players=Node(Player("CPU-2",2,p2,"Content/__pawn_yellow.png"),players)
+            players.Value.Ai=True
+            player2=players
+        if i == 2 and aantal>2:
+            name="Player3"
+            players=Node(Player(name,3,p3,"Content/__pawn_blue.png"),players)
+            player3=players
+        elif i==2 and aantal <=2:
+            players=Node(Player("CPU-3",3,p3,"Content/__pawn_blue.png"),players)
+            players.Value.Ai=True
+            player3=players
+        if i == 3 and aantal>3:
+            name="Player4"
+            players=Node(Player(name, 4, p4, "Content/__pawn_red.png"),players)
+            player4=players
+        elif i==3 and aantal<=3:
+            players=Node(Player("CPU-4",4,p4,"Content/__pawn_red.png"),players)
+            players.Value.Ai=True
+            player4=players
 
 
 ##Game Elements
