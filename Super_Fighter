@@ -25,3 +25,4 @@ def create_fighter():
         super_fighters = Node(Superfighter(name_fighter[i],damage_fighter[i]), super_fighters)
 
     return super_fighters
+
