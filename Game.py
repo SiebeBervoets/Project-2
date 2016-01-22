@@ -248,6 +248,65 @@ def Player_select(aantal):
 ##Game Elements
 
 
+def Bewegen(player):
+    global beurt
+    x=Rol()
+    if x==1:
+        canvas.blit(dobbel1,[780,735])
+    elif x==2:
+        canvas.blit(dobbel2,[780,735])
+    elif x==3:
+        canvas.blit(dobbel3,[780,735])
+    elif x==4:
+        canvas.blit(dobbel4,[780,735])
+    elif x==5:
+        canvas.blit(dobbel5,[780,735])
+    else:
+        canvas.blit(dobbel6,[780,735])
+    pygame.display.update(camera4)
+
+    for i in range(x):
+        if player.Locatie.Next==1 or player.Locatie.Position == "(0,0)" :
+            Move_print(1,0,0,0)
+            player.Richting=1
+            player.Locatie=player.Locatie.Right
+        elif player.Locatie.Next==2 or player.Locatie.Position == "(10,0)" :
+            Move_print(0,1,0,0)
+            player.Richting=2
+            player.Locatie=player.Locatie.Down
+        elif player.Locatie.Next==3 or player.Locatie.Position == "(10,10)" :
+            Move_print(0,0,1,0)
+            player.Richting=3
+            player.Locatie=player.Locatie.Left
+        elif player.Locatie.Next==4 or player.Locatie.Position == "(0,10)" :
+            Move_print(0,0,0,1)
+            player.Richting=4
+            player.Locatie=player.Locatie.Up
+        else:
+            if player.Richting == 1:
+                Move_print(1, 0, 0, 0)
+                player.Locatie=player.Locatie.Right
+            elif player.Richting == 2:
+                Move_print(0,1,0,0)
+                player.Locatie=player.Locatie.Down
+            elif player.Richting == 3:
+                Move_print(0,0,1,0)
+                player.Locatie=player.Locatie.Left
+            elif player.Richting == 4:
+                Move_print(0,0,0,1)
+                player.Locatie=player.Locatie.Up
+        Reprint()
+        if i!=x:
+            time.sleep(0.75)
+        else:
+            time.sleep(2.5)
+        print_players(1,1,1,1)
+        pygame.display.update(camera1)
+
+
+
+gameDisplay = pygame.display.set_mode((display_width,display_height))
+
 
 
 
