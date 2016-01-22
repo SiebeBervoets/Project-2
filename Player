@@ -1,1 +1,17 @@
+import pygame
+
+class Player:
+    def __init__(self,naam,kleur,locatie,texture):
+        self.Naam=naam
+        self.Kleur = kleur
+        self.levenspunten = 100
+        self.Conditie = 15
+        self.Locatie =locatie
+        self.Texture =pygame.image.load(texture).convert_alpha()
+        self.Richting=None
+        self.Ai=False
+
+    def Fight(self,target):
+        pass
+
 
