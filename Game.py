@@ -70,6 +70,13 @@ Board, p1, p2, p3, p4= build_square_matrix(board_size, offset)
 
 
 ##Game Elements
+
+
+
+
+
+
+##Loops
 def game_intro():
     pygame.mixer.music.load("Content/Rocky Theme Tune (8 Bit Remix).mp3")
     pygame.mixer.music.set_volume(1)
@@ -172,4 +179,136 @@ def settings():
         clock.tick(60)
 
 
-##Loops
+def help_loop():
+    global pause
+
+    x = (display_width * 0.45)
+    y = (display_height * 0.8)
+
+
+
+    gameExit = False
+
+    while not gameExit:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+
+        gameDisplay.fill(white)
+
+        largeText = pygame.font.SysFont("comicsansms",80)
+        TextSurf, TextRect = text_objects("Spelregels", largeText)
+        TextRect.center = ((display_width/2),(30))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("1. Diegene die het hoogst gooit begint met het spel.", largeText)
+        TextRect.center = ((184),(100))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("2. Elke speler heeft zijn eigen hoek (3 vakjes) en start vanaf die hoek met de klok mee.", largeText)
+        TextRect.center = ((298),(120))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("3. Elke speler begint met 100 Levenspunten en 15 Conditiepunten.", largeText)
+        TextRect.center = ((232),(140))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("4. Elke speler heeft een Scorekaart van zijn Character en een bijpassende pion (bokshandschoen).", largeText)
+        TextRect.center = ((331),(160))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("5. Er wordt gedobbeld om voort te bewegen over het bordspel.", largeText)
+        TextRect.center = ((219),(180))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("6. Wanneer een speler op een vakje ‘Fight!’ terechtkomt moet deze vechten tegen de Superfighter ongeacht of er een speler ook op dat vakje staat.", largeText)
+        TextRect.center = ((490),(200))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("7. De Superfighter wordt bepaald door een Superfighter-kaart van de stapel op het bordspel te pakken. Leg deze hierna weer onderaan de stapel.", largeText)
+        TextRect.center = ((486),(220))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("8. Dobbelen geeft, aan de hand van de Scorekaart, een schade aan met de bijbehorende Conditiepunten.", largeText)
+        TextRect.center = ((349),(240))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("9. Wanneer men geen Conditiepunten meer heeft kan er géén schade aan de tegenstander worden gedaan!", largeText)
+        TextRect.center = ((356),(260))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("10. Wanneer er gevochten moet worden en beide spelers geen Conditiepunten hebben ontvangt de verdediger 15 schade.", largeText)
+        TextRect.center = ((396),(280))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("11. De hoogste schade - de laagste schade = schade aan de speler met de laagste schade.", largeText)
+        TextRect.center = ((293),(300))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("12. Wanneer 2 spelers op hetzelfde vak komen wordt er tegen elkaar gevochten. Meer dan 2 spelers op één vak?", largeText)
+        TextRect.center = ((372),(320))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("Dan kiest de diegene die als laatste op het vak terecht is gekomen een tegenstander die ook op het vak staat.", largeText)
+        TextRect.center = ((382),(340))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("13. Wanneer je beide op een ‘Fight!’ vak terechtkomt wordt er alleen gevochten met de Superfighter en niet met elkaar.", largeText)
+        TextRect.center = ((393),(360))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("14. Je ontvangt 15 Conditiepunten als je langs je eigen hoek komt(max = 15 Conditiepunten).", largeText)
+        TextRect.center = ((309),(380))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("15. Je ontvangt 10 Levenspunten als je op je eigen hoek komt.", largeText)
+        TextRect.center = ((208),(400))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("16. Je kan je Levenspunten bijhouden aan de hand van het kladblok dat is bijgeleverd.", largeText)
+        TextRect.center = ((284),(420))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("17. Wanneer een hoek leeg is wordt er -10 Levenspunten gerekend. Met 2 of 3 spelers heb je dus een lege hoek.", largeText)
+        TextRect.center = ((370),(440))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("Ook wanneer iemand af is heb je een lege hoek.", largeText)
+        TextRect.center = ((184),(460))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        largeText = pygame.font.SysFont("Times New Roman",16)
+        TextSurf, TextRect = text_objects("18. Verwijder je pion wanneer je geen Levenspunten meer hebt. Je hebt verloren.", largeText)
+        TextRect.center = ((267),(480))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Back",150,500,150,50,green,bright_green,game_intro)
+        # button("Back to menu",350,500,150,50,green,bright_green,game_intro)
+        button("Quit Game",550,500,150,50,red,bright_red,quitgame)
+
+
+
+        pygame.display.update()
+        clock.tick(60)
