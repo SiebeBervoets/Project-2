@@ -246,7 +246,13 @@ def Player_select(aantal):
 
 
 ##Game Elements
-
+def Change_turn(x):
+    global players,beurt
+    beurt=x.Tail
+    time.sleep(1)
+    if beurt.IsEmpty :
+        beurt = players
+    pygame.display.update(camera4)
 
 def Bewegen(player):
     global beurt
