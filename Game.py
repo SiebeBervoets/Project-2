@@ -122,6 +122,7 @@ def game_intro():
 
         pygame.display.update()
         clock.tick(15)
+
 def settings():
     global pause
     gameDisplay.fill(white)
