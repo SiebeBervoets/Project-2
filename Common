@@ -1,1 +1,20 @@
+from random import randint
+from Node import  *
 
+black = (0,0,0)
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
+
+
+def Rol():
+    x=randint(1,6)
+    return x
+
+def Turn_list(List):
+    newlist=Empty
+    while not List.IsEmpty:
+        if not List.IsEmpty:
+            newlist=Node(List.Value,newlist)
+        List=List.Tail
+    return newlist
