@@ -1,4 +1,6 @@
 import pygame
+import time
+global screen,offset,camera1,player1,player2,player3,player4,Board,canvas
 
 class Player:
     def __init__(self,naam,kleur,locatie,texture):
@@ -11,7 +13,16 @@ class Player:
         self.Richting=None
         self.Ai=False
 
+    def Keys(self):
+        keys = pygame.key.get_pressed()
+        return keys
+
     def Fight(self,target):
         pass
 
+    def draw(self, screen, offset):
+       _width = int(34)
+       screen.blit(pygame.transform.scale(self.Texture, (_width, _width)),
+                (_width + self.Locatie.Position.X * offset,
+                _width + self.Locatie.Position.Y * offset))
 
