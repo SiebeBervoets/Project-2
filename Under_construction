@@ -20,6 +20,42 @@
 
 #### RUBEN
 
+  if starter.Levenspunten  == 100:
+        pygame.display.flip()
+        hp100= pygame.image.load("content/100 lifes.png")
+        hp100 = pygame.transform.scale(hp100, (227, 30))
+        gameDisplay.blit(hp100, (100, 500))
+    elif starter.Levenspunten == 99:
+        pygame.display.flip()
+        hp99 = pygame.image.load("content/99 lifes.png")
+        hp99 = pygame.transform.scale(hp99, (227, 30))
+        gameDisplay.blit(hp99, (100, 500))
+        time.sleep(3)
+    elif starter.Levenspunten == 98:
+        pygame.display.flip()
+        hp98 = pygame.image.load("content/98 lifes.png")
+        hp98 = pygame.transform.scale(hp98, (227, 30))
+        gameDisplay.blit(hp98, (100, 500))
+        time.sleep(3)
+    elif starter.Levenspunten == 97:
+        pygame.display.flip()
+        hp97 = pygame.image.load("content/97 lifes.png")
+        hp97 = pygame.transform.scale(hp97, (227, 30))
+        gameDisplay.blit(hp97, (100, 500))
+        time.sleep(3)
+    elif starter.Levenspunten == 96:
+        pygame.display.flip()
+        hp96= pygame.image.load("content/96 lifes.png")
+        hp96 = pygame.transform.scale(hp96, (227, 30))
+        gameDisplay.blit(hp96, (100, 500))
+        time.sleep(3)
+    elif starter.Levenspunten == 95:
+        pygame.display.flip()
+        hp95= pygame.image.load("content/95 lifes.png")
+        hp95 = pygame.transform.scale(hp95, (227, 30))
+        gameDisplay.blit(hp95, (100, 500))
+        time.sleep(3)
+
 #### MICHAEL
 
 #### RICARDO
