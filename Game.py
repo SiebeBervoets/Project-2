@@ -1,58 +1,59 @@
-from random import randint
-from threading import Thread
-import os, pygame
-from Player import *
-from Tile import *
+##Imports
+import os
+
 from Common import *
-from Node import *
-import time
+from Player import *
+from Sfighters import *
+from Tile import *
 
+##COLORS
+white = (255, 255, 255)
+red = (225, 0, 0)
+green = (0, 215, 0)
+blue = (0, 0, 255)
+yellow = (105, 75, 50)
+black = (0, 0, 0)
+bright_red = (255, 0, 0)
+bright_green = (0, 255, 0)
+block_color = (53, 115, 255)
 
-
-###COLORS
-white = 255, 255, 255
-red = 225, 0, 0
-green = 0, 225, 0
-blue = 0, 0, 255
-yellow = 105, 75, 50
-black = (0,0,0)
-bright_red = (255,0,0)
-bright_green = (0,255,0)
-block_color = (53,115,255)
-
-
+##_INIT
 pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
 
-
-size = width,height = 1000, 900
-display_width=1000
-display_height=900
+size = width, height = 1000, 900
+display_width = 1000
+display_height = 900
 
 screen = pygame.display.set_mode(size)
-canvas=pygame.display.get_surface()
-camera1=pygame.Rect(0,0,700,700)
-camera2=pygame.Rect(20,700,660,180)
-camera3=pygame.Rect(700,20,280,660)
-camera4=pygame.Rect(700,700,280,180)
+gameDisplay = pygame.display.get_surface()
+canvas = pygame.display.get_surface()
+camera1 = pygame.Rect(0, 0, 700, 700)
+camera2 = pygame.Rect(20, 700, 500, 180)
+camera3 = pygame.Rect(700, 20, 280, 660)
+camera4 = pygame.Rect(700, 700, 280, 180)
 
+mid_camera = pygame.Rect(80, 80, 539, 539)
+mid_starter = pygame.Rect(95, 95, 244, 510)
+mid_target = pygame.Rect(360, 95, 244, 510)
 pygame.display.set_caption('Survivor by group 1')
-GameIcon=pygame.image.load("Content/_fight.png").convert()
+GameIcon = pygame.image.load("Content/_fight.png").convert()
 pygame.display.set_icon(GameIcon)
 
-dobbel1=pygame.image.load('Content\Dobbel_1.png').convert()
-dobbel2=pygame.image.load('Content\Dobbel_2.png').convert()
-dobbel3=pygame.image.load('Content\Dobbel_3.png').convert()
-dobbel4=pygame.image.load('Content\Dobbel_4.png').convert()
-dobbel5=pygame.image.load('Content\Dobbel_5.png').convert()
-dobbel6=pygame.image.load('Content\Dobbel_6.png').convert()
+dobbel1 = pygame.image.load('Content\Dobbel_1.png').convert()
+dobbel2 = pygame.image.load('Content\Dobbel_2.png').convert()
+dobbel3 = pygame.image.load('Content\Dobbel_3.png').convert()
+dobbel4 = pygame.image.load('Content\Dobbel_4.png').convert()
+dobbel5 = pygame.image.load('Content\Dobbel_5.png').convert()
+dobbel6 = pygame.image.load('Content\Dobbel_6.png').convert()
+Fightmid = pygame.image.load("content/fight_moment.png").convert_alpha()
+
+Super_fighters = create_fighters()
 
 offset = 60
 board_size = 11
-Board, p1, p2, p3, p4= build_square_matrix(board_size, offset)
-
-
+Board, p1, p2, p3, p4 = build_square_matrix(board_size, offset)
 
 ## CONSTRUCTORS
 def quitgame():
@@ -85,7 +86,7 @@ def paused():
         button("Quit",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
-        Clock.tick(15)
+        clock.tick(15)
 
 def button(msg, x, y, w, h, ic, ac, action=None, a=None, b=None, c=None, d=None, e=None, f=None, g=None):
     mouse = pygame.mouse.get_pos()
@@ -122,6 +123,7 @@ def Reprint():
     screen.fill(black)
     Board.Reset(loops)
     Board.Draw(screen)
+    canvas.blit(beurt.Value.TurnTexture, (510, 700))
     canvas.fill((255,255,255),camera2)
     canvas.fill((255,255,255),camera3)
     canvas.fill((255,255,255),camera4)
@@ -129,81 +131,90 @@ def Reprint():
 
 def Move_print(a, b, c, d):
     player=beurt.Value
+    w, x, y, z = Return_player(player.Kleur)
     _width=int(34)
     while a+b+c+d !=0:
         if a>0:
             a-=1
             X_plus_move = _width
-            for i in range(_width*2-7):
-                   Reprint()
-                   if player.Kleur ==1:
+            for i in range(_width-3):
+                    Reprint()
+                    if player.Kleur ==1:
                        print_players(0,1,1,1)
-                   elif player.Kleur == 2:
+                    elif player.Kleur == 2:
                        print_players(1,0,1,1)
-                   elif player.Kleur==3:
+                    elif player.Kleur==3:
                        print_players(1,1,0,1)
-                   elif player.Kleur==4:
+                    elif player.Kleur==4:
                        print_players(1,1,1,0)
-                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                    screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
                                 (X_plus_move + player.Locatie.Position.X * offset,
                                  _width + player.Locatie.Position.Y * offset))
-                   X_plus_move+=1
-                   pygame.display.update(camera1)
+                    X_plus_move += 2
+                    print_players(w, x, y, z)
+                    pygame.display.update(camera1)
+                    time.sleep(0.002)
 
         elif b>0:
             b-=1
             Y_plus_move = _width
-            for i in range(_width*2-7):
-                   Reprint()
-                   if player.Kleur ==1:
+            for i in range(_width-3):
+                    Reprint()
+                    if player.Kleur ==1:
                        print_players(0,1,1,1)
-                   elif player.Kleur == 2:
+                    elif player.Kleur == 2:
                        print_players(1,0,1,1)
-                   elif player.Kleur==3:
+                    elif player.Kleur==3:
                        print_players(1,1,0,1)
-                   elif player.Kleur==4:
+                    elif player.Kleur==4:
                        print_players(1,1,1,0)
-                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                    screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
                                 (_width + player.Locatie.Position.X * offset,
                                 Y_plus_move + player.Locatie.Position.Y * offset))
-                   Y_plus_move+=1
-                   pygame.display.update(camera1)
+                    Y_plus_move += 2
+                    print_players(w, x, y, z)
+                    pygame.display.update(camera1)
+                    time.sleep(0.002)
         elif c>0:
             c-=1
             X_min_move = _width
-            for i in range(_width*2-7):
-                   Reprint()
-                   if player.Kleur ==1:
+            for i in range(_width-3):
+                    Reprint()
+                    if player.Kleur ==1:
                        print_players(0,1,1,1)
-                   elif player.Kleur == 2:
+                    elif player.Kleur == 2:
                        print_players(1,0,1,1)
-                   elif player.Kleur==3:
+                    elif player.Kleur==3:
                        print_players(1,1,0,1)
-                   elif player.Kleur==4:
+                    elif player.Kleur==4:
                        print_players(1,1,1,0)
-                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                    screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
                                 (X_min_move + player.Locatie.Position.X * offset,
                                 _width + player.Locatie.Position.Y * offset))
-                   X_min_move-=1
-                   pygame.display.update(camera1)
+                    X_min_move -= 2
+                    print_players(w, x, y, z)
+                    pygame.display.update(camera1)
+                    time.sleep(0.002)
         elif d>0:
             d-=1
             Y_min_move = _width
-            for i in range(_width*2-7):
-                   Reprint()
-                   if player.Kleur ==1:
+            for i in range(_width-3):
+                    Reprint()
+                    if player.Kleur ==1:
                        print_players(0,1,1,1)
-                   elif player.Kleur == 2:
+                    elif player.Kleur == 2:
                        print_players(1,0,1,1)
-                   elif player.Kleur==3:
+                    elif player.Kleur==3:
                        print_players(1,1,0,1)
-                   elif player.Kleur==4:
+                    elif player.Kleur==4:
                        print_players(1,1,1,0)
-                   screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
+                    screen.blit(pygame.transform.scale(player.Texture, (_width, _width)),
                                 (_width + player.Locatie.Position.X * offset,
                                 Y_min_move + player.Locatie.Position.Y * offset))
-                   Y_min_move-=1
-                   pygame.display.update(camera1)
+                    Y_min_move -= 2
+                    print_players(w, x, y, z)
+                    pygame.display.update(camera1)
+                    time.sleep(0.002)
         Reprint()
 
 def print_players(x,y,z,a):
@@ -219,42 +230,50 @@ def print_players(x,y,z,a):
 
 
 ##Pre-Game
+def Set_music(height):
+    height *= 0.1
+    pygame.mixer.music.set_volume(height)
+
 def Player_select(aantal):
-    global players,player1,player2,player3,player4
-    players=Empty
+    global players, player1, player2, player3, player4
+    players = Empty
     for i in range(4):
         if i == 0 and aantal > 0:
-            name="Player1"
-            players=Node(Player(name,1,p1,"Content/__pawn_blue.png"),players)
-            player1=players
-        elif i ==0 and aantal == 0:
-            players=Node(Player("CPU-1",1,p1,"Content/__pawn_blue.png"),players)
-            players.Value.Ai=True
-            player1=players
-        if i == 1 and aantal >1:
-            name="Player2"
-            players=Node(Player(name,2,p2,"Content/__pawn_yellow.png"),players)
-            player2=players
-        elif i==1 and aantal <=1:
-            players=Node(Player("CPU-2",2,p2,"Content/__pawn_yellow.png"),players)
-            players.Value.Ai=True
-            player2=players
-        if i == 2 and aantal>2:
-            name="Player3"
-            players=Node(Player(name,3,p3,"Content/__pawn_blue.png"),players)
-            player3=players
-        elif i==2 and aantal <=2:
-            players=Node(Player("CPU-3",3,p3,"Content/__pawn_blue.png"),players)
-            players.Value.Ai=True
-            player3=players
-        if i == 3 and aantal>3:
-            name="Player4"
-            players=Node(Player(name, 4, p4, "Content/__pawn_red.png"),players)
-            player4=players
-        elif i==3 and aantal<=3:
-            players=Node(Player("CPU-4",4,p4,"Content/__pawn_red.png"),players)
-            players.Value.Ai=True
-            player4=players
+            name = "Player1"
+            players = Node(Player(name, 6, p1, "Content/__pawn_blue.png", "content/players/player_green.png"), players)
+            player1 = players
+        elif i == 0 and aantal == 0:
+            players = Node(Player("CPU-1", 6, p1, "Content/__pawn_blue.png", "content/players/player_green.png"),
+                           players)
+            players.Value.Ai = True
+            player1 = players
+        if i == 1 and aantal > 1:
+            name = "Player2"
+            players = Node(Player(name, 7, p2, "Content/__pawn_yellow.png", "content/players/player_yellow.png"),
+                           players)
+            player2 = players
+        elif i == 1 and aantal <= 1:
+            players = Node(Player("CPU-2", 7, p2, "Content/__pawn_yellow.png", "content/players/player_yellow.png"),
+                           players)
+            players.Value.Ai = True
+            player2 = players
+        if i == 2 and aantal > 2:
+            name = "Player3"
+            players = Node(Player(name, 8, p3, "Content/__pawn_blue.png", "content/players/player_blue.png"), players)
+            player3 = players
+        elif i == 2 and aantal <= 2:
+            players = Node(Player("CPU-3", 8, p3, "Content/__pawn_blue.png", "content/players/player_blue.png"),
+                           players)
+            players.Value.Ai = True
+            player3 = players
+        if i == 3 and aantal > 3:
+            name = "Player4"
+            players = Node(Player(name, 9, p4, "Content/__pawn_red.png", "content/players/player_red.png"), players)
+            player4 = players
+        elif i == 3 and aantal <= 3:
+            players = Node(Player("CPU-4", 9, p4, "Content/__pawn_red.png", "content/players/player_red.png"), players)
+            players.Value.Ai = True
+            player4 = players
 
 
 ##Game Elements
@@ -266,8 +285,28 @@ def Change_turn(x):
         beurt = players
     pygame.display.update(camera4)
 
+def Rol():
+    x = randint(1, 6)
+    if x == 1:
+        canvas.blit(dobbel1, [780, 735])
+    elif x == 2:
+        canvas.blit(dobbel2, [780, 735])
+    elif x == 3:
+        canvas.blit(dobbel3, [780, 735])
+    elif x == 4:
+        canvas.blit(dobbel4, [780, 735])
+    elif x == 5:
+        canvas.blit(dobbel5, [780, 735])
+    else:
+        canvas.blit(dobbel6, [780, 735])
+    pygame.display.update(camera4)
+    return x
+
 def Bewegen(player):
     global beurt
+    button("Gooi dobbelsteen", 40, 720, 200, 140, red, red)
+    pygame.display.update(camera2)
+    
     x=Rol()
     if x==1:
         canvas.blit(dobbel1,[780,735])
@@ -320,12 +359,167 @@ def Bewegen(player):
             time.sleep(2.5)
         print_players(1,1,1,1)
         pygame.display.update(camera1)
+    Bepaal_actie(player)
+    Change_turn(beurt)
 
-
-
-gameDisplay = pygame.display.set_mode((display_width,display_height))
+def Bepaal_actie(player):
+    global players
+    player_target, position = Return_same_location(players, player.Locatie.Position, player.Kleur)
+    if player.Locatie.Type == 10:
+        Fight(player, Return_random_element(Super_fighters))
+    elif player.Locatie.Type != player.Kleur and player.Locatie.Type in [6, 7, 8, 9]:
+        Fight(player, Return_bepaalde_player(player.Locatie.Type))
+    elif player.Locatie.Position in position:
+        Fight(player, player_target)
 
 ## FIGHT
+def Fight(starter, target):
+    canvas.blit(Fightmid, (200, 290))
+    pygame.display.update(camera1)
+    time.sleep(1)
+
+    canvas.blit(starter.FightTexture, (700, 20))
+    canvas.blit(target.Value.FightTexture, (700, 350))
+    pygame.display.update(camera3)
+
+    time.sleep(1)
+    canvas.fill((0, 0, 0), mid_camera)
+    canvas.fill((255, 255, 255), mid_target)
+    canvas.fill((255, 255, 255), mid_starter)
+    print_players(1, 1, 1, 1)
+    pygame.display.update(camera1)
+
+    if not starter.Ai and target.Value.Ai == False:
+        Player_vs_player_fight(starter, target)
+    elif starter.Ai == False and target.Value.Ai == True:
+        Player_defense_fight(starter, target)
+    elif starter.Ai == True and target.Value.Ai == False:
+        Player_attack_fight(starter, target)
+    elif starter.Ai == True and target.Value.Ai == True:
+        Ai_fight(starter, target)
+
+def Player_vs_player_fight(starter, target, tar_first_roll=None, tar_choice=None, dmg=None, start_first_roll=None,start_choice=None):
+    # print("Tar FIRST ROLL")
+    # print(tar_first_roll)
+    # print()
+    # print("TAR CHOICE")
+    # print(tar_choice)
+    # print()
+    # print("TARG DMG")
+    # print(dmg)
+    # print()
+    # print("Start ROLL")
+    # print(start_first_roll)
+    # print()
+    # print("START ROLL")
+    # print(start_choice)
+
+    if start_choice != None:
+        starter_dmg = starter.Damage[start_first_roll - 1][start_choice]
+
+        print(starter_dmg)
+        Calc_parameters(starter, target, starter_dmg, dmg)
+
+    if tar_first_roll == True and tar_first_roll != False:
+        y = Rol()
+        print("Y IS")
+        print(y)
+    if start_first_roll == True and start_first_roll != False:
+        x = Rol()
+        print("X IS")
+        print(x)
+    if tar_choice in [0, 1, 2] and dmg == None:
+        dmg = target.Value.Damage[tar_first_roll - 1][tar_choice]
+        target.Value.Conditie -= target.Value.Damage[tar_first_roll - 1][tar_choice + 3]
+
+    if tar_first_roll == None:
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("Gooi dobbelsteen", 40, 720, 200, 140, red, green, Player_vs_player_fight, starter, target, True)
+            pygame.display.flip()
+            clock.tick(10)
+
+    elif tar_choice == None:
+        time.sleep(0.5)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("keuze 1", 40, 725, 200, 40, red, green, Player_vs_player_fight, starter, target, y, 0)
+            button("keuze 2", 40, 770, 200, 40, red, green, Player_vs_player_fight, starter, target, y, 1)
+            button("keuze 3", 40, 815, 200, 40, red, green, Player_vs_player_fight, starter, target, y, 2)
+            pygame.display.flip()
+            clock.tick(10)
+
+    elif start_first_roll == None:
+        canvas.fill((255, 255, 255), camera4)
+        time.sleep(0.5)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("Gooi dobbelsteen", 40, 720, 200, 140, red, green, Player_vs_player_fight, starter, target, False,
+                   False, dmg, True)
+            pygame.display.flip()
+
+            clock.tick(10)
+    elif start_choice == None:
+        time.sleep(0.5)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("keuze 1", 40, 725, 200, 40, red, green, Player_vs_player_fight, starter, target, False, False, dmg,
+                   x, 0)
+            button("keuze 2", 40, 770, 200, 40, red, green, Player_vs_player_fight, starter, target, False, False, dmg,
+                   x, 1)
+            button("keuze 3", 40, 815, 200, 40, red, green, Player_vs_player_fight, starter, target, False, False, dmg,
+                   x, 2)
+            pygame.display.flip()
+            clock.tick(10)
+
 def Player_attack_fight(starter, target, first_roll=None, choice=None):
     if first_roll == None:
         while True:
@@ -383,7 +577,7 @@ def Player_attack_fight(starter, target, first_roll=None, choice=None):
     # print berekening
     Calc_parameters(starter, target, starter_dmg, dmg)
     
-    def Player_defense_fight(starter, target, first_roll=None, dmg=None, choice=None):
+def Player_defense_fight(starter, target, first_roll=None, dmg=None, choice=None):
     # print Tegenstander rol
     if choice != None:
         starter_dmg = starter.Damage[first_roll - 1][choice]
@@ -442,7 +636,6 @@ def Player_attack_fight(starter, target, first_roll=None, choice=None):
             pygame.display.flip()
             clock.tick(10)
 
-    
 def Ai_fight(starter, target):
     x = Rol()
     if target.Value.Player == True:
@@ -523,7 +716,7 @@ def game_intro():
         TextRect.center = ((display_width/2),(display_height/10))
         gameDisplay.blit(TextSurf, TextRect)
 
-        button("Start Game",25,600,150,50,green,bright_green,game_loop)
+        button("Start Game",25,600,150,50,green,bright_green,game_loop,True)
         st = pygame.image.load("Content/start game button.png")
         st = pygame.transform.scale(st, (150, 50))
         gameDisplay.blit(st, (25, 600))
@@ -565,44 +758,24 @@ def settings():
                 pygame.quit()
                 quit()
 
-
-        button("back",25,500,150,50,green,bright_green,game_intro)
-        back = pygame.image.load("Content/back button.png")
-        back = pygame.transform.scale(back, (150, 50))
-        gameDisplay.blit(back, (25, 500))
-        button("player amount",25,150,150,50,white,white,)
-
-        button("2",320,150,75,50,red,white)
-        one = pygame.image.load("Content/1.png")
-        one = pygame.transform.scale(one, (75, 50))
-        gameDisplay.blit(one, (320, 150))
-
-        button("3",445,150,75,50,red,white)
-        two = pygame.image.load("Content/2.png")
-        two = pygame.transform.scale(two, (75, 50))
-        gameDisplay.blit(two, (445, 150))
-
-        button("4",570,150,75,50,red,white)
-        tri = pygame.image.load("Content/3.png")
-        tri = pygame.transform.scale(tri, (75, 50))
-        gameDisplay.blit(tri, (570, 150))
-
-        button("5",695,150,75,50,red,white)
-        fou = pygame.image.load("Content/4.png")
-        fou = pygame.transform.scale(fou, (75, 50))
-        gameDisplay.blit(fou, (695, 150))
+        button("back", 25, 500, 150, 50, green, bright_green, game_intro)
+        
+        button("Players:", 125, 150, 150, 50, white, white)
+        button("1", 320, 150, 75, 50, red, white, Player_select, 1)
+        button("2", 445, 150, 75, 50, red, white, Player_select, 2)
+        button("3", 570, 150, 75, 50, red, white, Player_select, 3)
+        button("4", 695, 150, 75, 50, red, white, Player_select, 4)
+        
+        button("Music:", 125, 220, 150, 50, white, white)
+        button("On", 320, 220, 75, 50, red, white, Set_music, 1)
+        button("Off", 445, 220, 75, 50, red, white, Set_music, 0)
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(15)
 
 
 def help_loop():
     global pause
-
-    x = (display_width * 0.45)
-    y = (display_height * 0.8)
-
-
 
     gameExit = False
 
@@ -729,15 +902,16 @@ def help_loop():
 
         pygame.display.update()
         clock.tick(60)
-        
-def game_loop():
-    global pause,loops,beurt,players
-    players=Turn_list(players)
-    beurt=players
-    loops=0
-    Reprint()
-    print_players(1,1,1,1)
-    pygame.display.flip()
+
+def game_loop(start=None):
+    global pause, loops, beurt, players
+    if start == True:
+        players = Turn_list(players)
+        beurt = players
+        loops = 0
+        Reprint()
+        print_players(1, 1, 1, 1)
+        pygame.display.flip()
     gameExit = False
     while not gameExit:
         for event in pygame.event.get():
@@ -749,18 +923,18 @@ def game_loop():
                     quitgame()
                 if event.key == pygame.K_h:
                     help_loop()
-                    beurt = Turn_list(players)
-
-
-        # print(1)
+                if event.key == pygame.K_SPACE:
+                    Bewegen(beurt.Value)
         Reprint()
-        button("Gooi dobbelsteen",40,720,200,140,red,green,Bewegen,beurt.Value,)
-        button("Stop beurt",280,720,200,140,red,green,Change_turn,beurt)
-        print_players(1,1,1,1)
-        pygame.display.update([camera1,camera2,camera3])
+        button("Gooi dobbelsteen", 40, 720, 200, 140, red, green, Bewegen, beurt.Value, )
+        print_players(1, 1, 1, 1)
+        pygame.display.flip()
         if loops == 5:
-            loops=0
-        clock.tick(60)
+            loops = 0
+        clock.tick(10)
 
-Player_select(0)
+
+## START
+Set_music(2)
+Player_select(2)
 game_intro()
