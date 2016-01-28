@@ -2,14 +2,21 @@ from random import randint
 from Node import  *
 
 black = (0,0,0)
+
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
 
-def Rol():
-    x=randint(1,6)
-    return x
+def Return_player(player_kleur):
+    if player_kleur == 6:
+        return 0,1,1,1
+    elif player_kleur==7:
+        return 1,0,1,1
+    elif player_kleur ==8:
+        return 1,1,0,1
+    else:
+        return 1,1,1,0
 
 def Turn_list(List):
     newlist=Empty
