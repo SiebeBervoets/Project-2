@@ -385,6 +385,22 @@ def Player_attack_fight(starter, target, first_roll=None, choice=None):
 
 
 ##Returns
+def Return_same_location(List, player_location, player_kleur):
+    locations = []
+    while not List.IsEmpty:
+        if List.Value.Locatie.Position == player_location and List.Value.Kleur != player_kleur:
+            locations.append(List.Value.Locatie.Position)
+            return List, locations
+        List = List.Tail
+    return None, []
+
+
+def Return_random_element(List):
+    for i in range(randint(0, 17)):
+        List = List.Tail
+    return List
+    
+    
 def Return_bepaalde_player(tile_kleur):
     if tile_kleur == 6:
         return player1
@@ -394,7 +410,6 @@ def Return_bepaalde_player(tile_kleur):
         return player3
     else:
         return player4
-
 
 ##Loops
 def game_intro():
