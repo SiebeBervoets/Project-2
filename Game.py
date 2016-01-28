@@ -382,6 +382,21 @@ def Player_attack_fight(starter, target, first_roll=None, choice=None):
     # print dmg
     # print berekening
     Calc_parameters(starter, target, starter_dmg, dmg)
+    
+    
+def Ai_fight(starter, target):
+    x = Rol()
+    if target.Value.Player == True:
+        rand = randint(0, 2)
+        dmg = target.Value.Damage[x - 1][rand]
+    else:
+        dmg = target.Value.Damage[x - 1]
+
+    y = Rol()
+    rand = randint(0, 2)
+    starter_dmg = starter.Damage[y - 1][rand]
+
+    Calc_parameters(starter, target, starter_dmg, dmg)
 
 
 ##Returns
