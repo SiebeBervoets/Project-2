@@ -171,4 +171,15 @@ def game_loop(start=None):
 
 #### MICHAEL
 
+def showWhoIsNext():
+    if beurt.Value.Kleur  == 6:
+        print ("player 2 is next")
+    elif beurt.Value.Kleur == 7:
+        print ("player 3 is next")
+    elif beurt.Value.Kleur == 8:
+        print ('player 4 is next')
+    elif beurt.Value.Kleur == 9:
+        print ('player 1 is next')
+ showWhoIsNext()
+ 
 #### RICARDO
