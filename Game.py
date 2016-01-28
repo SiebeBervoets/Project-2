@@ -383,6 +383,65 @@ def Player_attack_fight(starter, target, first_roll=None, choice=None):
     # print berekening
     Calc_parameters(starter, target, starter_dmg, dmg)
     
+    def Player_defense_fight(starter, target, first_roll=None, dmg=None, choice=None):
+    # print Tegenstander rol
+    if choice != None:
+        starter_dmg = starter.Damage[first_roll - 1][choice]
+
+        Calc_parameters(starter, target, starter_dmg, dmg)
+
+    if first_roll == None:
+        y = Rol()
+        if target.Value.Player == True:
+            dmg = target.Value.Damage[y - 1][randint(0, 2)]
+        else:
+            dmg = target.Value.Damage[y - 1]
+        print(dmg)
+
+    if first_roll == True:
+        x = Rol()
+
+    if first_roll == None:
+        time.sleep(0.5)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("Gooi dobbelsteen", 40, 720, 200, 140, red, green, Player_defense_fight, starter, target, True, dmg)
+            pygame.display.flip()
+            clock.tick(10)
+    elif choice == None:
+        time.sleep(0.5)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("keuze 1", 40, 725, 200, 40, red, green, Player_defense_fight, starter, target, x, dmg, 0)
+            button("keuze 2", 40, 770, 200, 40, red, green, Player_defense_fight, starter, target, x, dmg, 1)
+            button("keuze 3", 40, 815, 200, 40, red, green, Player_defense_fight, starter, target, x, dmg, 2)
+            pygame.display.flip()
+            clock.tick(10)
+
     
 def Ai_fight(starter, target):
     x = Rol()
@@ -398,6 +457,14 @@ def Ai_fight(starter, target):
 
     Calc_parameters(starter, target, starter_dmg, dmg)
 
+def Calc_parameters(starter, target, start_dmg, target_dmg):
+    if target_dmg - start_dmg <= 0:
+        print("Alle damage ontweken!")
+    else:
+        starter.Levenspunten = starter.Levenspunten - (target_dmg - start_dmg)
+        print("Je levenspunten zijn gedaalt naar : {}".format(starter.Levenspunten))
+    Change_turn(beurt)
+    game_loop(False)
 
 ##Returns
 def Return_same_location(List, player_location, player_kleur):
