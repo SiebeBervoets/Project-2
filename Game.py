@@ -326,7 +326,16 @@ def Bewegen(player):
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 
 
-
+##Returns
+def Return_bepaalde_player(tile_kleur):
+    if tile_kleur == 6:
+        return player1
+    elif tile_kleur == 7:
+        return player2
+    elif tile_kleur == 8:
+        return player3
+    else:
+        return player4
 
 
 ##Loops
