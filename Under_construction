@@ -2,6 +2,22 @@
 
 #### SIEBE
 
+  #### Under Fight
+
+ if starter.Player == True and target.Value.Player == True:
+        canvas.blit(cp15,(95,300)) and canvas.blit(cp15,(360,300))
+    elif starter.Player == True and target.Value.Player == False:
+        canvas.blit(cp14,(95,300))
+    elif starter.Ai == True and target.Value.Player == True:
+        canvas.blit(cp13,(95,300)) and canvas.blit(cp13,(360,300))
+    elif starter.Ai == True and target.Value.Player == False:
+        canvas.blit(cp12,(95,300))
+
+    pygame.display.update(camera1)
+
+
+
+
 #### RUBEN
 
 #### MICHAEL
