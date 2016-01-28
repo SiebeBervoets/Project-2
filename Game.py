@@ -87,23 +87,35 @@ def paused():
         pygame.display.update()
         Clock.tick(15)
 
-def button(msg,x,y,w,h,ic,ac,action=None,amount=None):
+def button(msg, x, y, w, h, ic, ac, action=None, a=None, b=None, c=None, d=None, e=None, f=None, g=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    if (mouse[0]<x+w and mouse[0] > x) and (mouse[1]<y+h and mouse[1] > y):
-        pygame.draw.rect(canvas, ac,(x,y,w,h))
+    if (mouse[0] < x + w and mouse[0] > x) and (mouse[1] < y + h and mouse[1] > y):
+        pygame.draw.rect(canvas, ac, (x, y, w, h))
         if click[0] == 1 and action != None:
-            if amount!=None:
-                action(amount)
+            if g != None:
+                action(a, b, c, d, e, f, g)
+            elif f != None:
+                action(a, b, c, d, e, f)
+            elif e != None:
+                action(a, b, c, d, e)
+            elif d != None:
+                action(a, b, c, d)
+            elif c != None:
+                action(a, b, c)
+            elif b != None:
+                action(a, b)
+            elif a != None:
+                action(a)
             else:
                 action()
     else:
-        pygame.draw.rect(canvas, ic,(x,y,w,h))
-    smallText = pygame.font.SysFont("verdana",20)
+        pygame.draw.rect(canvas, ic, (x, y, w, h))
+    smallText = pygame.font.SysFont("verdana", 20)
     textSurf, textRect = text_objects(msg, smallText)
-    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    textRect.center = ((x + (w / 2)), (y + (h / 2)))
     canvas.blit(textSurf, textRect)
-
+    
 ##PRINTS
 def Reprint():
     global loops
