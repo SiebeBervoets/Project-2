@@ -325,6 +325,64 @@ def Bewegen(player):
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 
+## FIGHT
+def Player_attack_fight(starter, target, first_roll=None, choice=None):
+    if first_roll == None:
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            button("Gooi dobbelsteen", 40, 720, 200, 140, red, green, Player_attack_fight, starter, target, True)
+            pygame.display.flip()
+            clock.tick(10)
+
+    ## TODO print keuzes
+    elif choice == None:
+        x = Rol()
+        print(first_roll)
+        time.sleep(1)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quitgame()
+                    if event.key == pygame.K_h:
+                        help_loop()
+                    if event.key == pygame.K_SPACE:
+                        Bewegen(beurt.Value)
+
+            canvas.fill((255, 255, 255), camera2)
+            button("keuze 1", 40, 725, 200, 40, red, green, Player_attack_fight, starter, target, x, 0)
+            button("keuze 2", 40, 770, 200, 40, red, green, Player_attack_fight, starter, target, x, 1)
+            button("keuze 3", 40, 815, 200, 40, red, green, Player_attack_fight, starter, target, x, 2)
+            pygame.display.flip()
+            clock.tick(10)
+
+    dmg = target.Value.Damage[first_roll - 1][choice]
+    target.Value.Conditie -= target.Value.Damage[first_roll - 1][choice + 3]
+    # time.sleep(5)
+    y = Rol()
+    # print rol
+    # time.sleep(5)
+    z = randint(0, 2)
+    starter_dmg = starter.Damage[y - 1][z]
+    starter.Conditie -= starter.Damage[y - 1][z + 3]
+    # print dmg
+    # print berekening
+    Calc_parameters(starter, target, starter_dmg, dmg)
+
 
 ##Returns
 def Return_bepaalde_player(tile_kleur):
