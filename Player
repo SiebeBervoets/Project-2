@@ -4,7 +4,7 @@ import time
 global screen,offset,camera1,player1,player2,player3,player4,Board,canvas
 
 class Player:
-    def __init__(self,naam,kleur,locatie,texture,fightTexture):
+    def __init__(self,naam,kleur,locatie,texture,fightTexture,face_text):
         self.Naam=naam
         self.Kleur = kleur
         self.Levenspunten = 100
@@ -12,9 +12,11 @@ class Player:
         self.Locatie =locatie
         self.FightTexture=self.Convert(fightTexture)
         self.Texture =pygame.image.load(texture).convert_alpha()
+        self.FaceTexture = self.Face_convert(face_text)
         self.Richting=None
+        self.Keuzes = self.Create_keuze(kleur)
         self.Damage=self.Define_dmg(kleur)
-        self.Ai=False
+        self.Ai=0
         self.Player=True
         self.TurnTexture = self.turntexture()
 
@@ -61,4 +63,9 @@ class Player:
        screen.blit(pygame.transform.scale(self.Texture, (_width, _width)),
                 (_width + self.Locatie.Position.X * offset,
                 _width + self.Locatie.Position.Y * offset))
+    
+    def Face_convert(self, texture):
+        img = pygame.image.load(texture).convert_alpha()
+        img = pygame.transform.scale(img, (150, 150))
+        return img
 
