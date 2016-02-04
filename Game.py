@@ -903,6 +903,36 @@ def help_loop():
         pygame.display.update()
         clock.tick(60)
 
+def pause_screen():
+    global pause
+
+    gameExit = False
+
+    while not gameExit:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        gameDisplay.fill(white)
+
+        largeText = pygame.font.SysFont("comicsansms", 40)
+        TextSurf, TextRect = text_objects("Paused", largeText)
+        TextRect.center = ((350), (150))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Sounds:", 90, 220, 150, 50, white, white)
+        button("On", 250, 220, 50, 50, red, white, Set_music, 1)
+        button("Off", 375, 220, 50, 50, red, white, Set_music, 0)
+
+        button("Continue", 90, 500, 150, 50, green, bright_green, game_loop, False)
+        button("Back to menu", 275, 500, 150, 50, green, bright_green, game_intro)
+        button("Quit Game", 460, 500, 150, 50, red, bright_red, quitgame)
+
+        pygame.display.update(mid_camera)
+        clock.tick(15)
+
 def death_screen(kleur, aantal):
     global pause
     count = 0
