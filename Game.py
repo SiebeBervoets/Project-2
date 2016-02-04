@@ -663,14 +663,31 @@ def Ai_fight(starter, target):
 
 def Calc_parameters(starter, target, start_dmg, target_dmg):
     if target_dmg - start_dmg <= 0:
-        print("Alle damage ontweken!")
+        i = 1  # TODO
     else:
         starter.Levenspunten = starter.Levenspunten - (target_dmg - start_dmg)
-        print("Je levenspunten zijn gedaalt naar : {}".format(starter.Levenspunten))
-        canvas.fill((255, 255, 255), camera5)
-        canvas.blit(hp_dict["HP_{}".format(starter.Levenspunten)], (103, 280))
-        pygame.display.update(camera5)
-    Change_turn(beurt)
+        if starter.Levenspunten <= 0:
+            starter.dead = True
+            pygame.mixer.music.load("content/soundeffects/dead1.wav")
+            pygame.mixer.music.play(1, 0.0)
+            loop_pause(25)
+            Dead(starter.Kleur)
+            game_loop(False)
+        else:
+            canvas.fill((255, 255, 255), camera5)
+            canvas.blit(hp_dict["HP_{}".format(starter.Levenspunten)], (103, 280))
+            pygame.display.update(camera5)
+    if target.Value.Player:
+        canvas.fill((255,255,255), camera7)
+        canvas.blit(cp_dict["CP_{}".format(target.Value.Conditie)], (365, 350))
+        pygame.display.update(camera7)
+
+    canvas.fill((255,255,255), camera6)
+    canvas.blit(cp_dict["CP_{}".format(starter.Conditie)], (103, 350))
+    pygame.display.update(camera6)
+
+    loop_pause(60)
+    Change_turn()
     game_loop(False)
 
 ##Returns
