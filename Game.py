@@ -903,6 +903,48 @@ def help_loop():
         pygame.display.update()
         clock.tick(60)
 
+def death_screen(kleur, aantal):
+    global pause
+    count = 0
+
+    canvas.fill(white, mid_camera)
+    if kleur == 6:
+        b = pygame.image.load("content/__pawn_green.png")
+        b = pygame.transform.scale(b, (175, 175))
+        canvas.blit(b, (275, 260))
+    elif kleur == 7:
+        y = pygame.image.load("content/__pawn_yellow.png")
+        y = pygame.transform.scale(y, (175, 175))
+        canvas.blit(y, (275, 260))
+    elif kleur == 8:
+        g = pygame.image.load("content/__pawn_blue.png")
+        g = pygame.transform.scale(g, (175, 175))
+        canvas.blit(g, (275, 260))
+    elif kleur == 9:
+        r = pygame.image.load("content/__pawn_red.png")
+        r = pygame.transform.scale(r, (175, 175))
+        canvas.blit(r, (275, 260))
+
+    gameExit = False
+    while count < aantal:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    game_intro()
+
+        largeText = pygame.font.SysFont("comicsansms", 40)
+        TextSurf, TextRect = text_objects("{} Died!".format(beurt.Value.Naam), largeText)
+        TextRect.center = ((350), (200))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        pygame.display.update(mid_camera)
+        count += 1
+        clock.tick(15)
+
 def game_loop(start=None):
     global pause, loops, beurt, players
     if start == True:
