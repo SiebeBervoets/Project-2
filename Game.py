@@ -801,6 +801,26 @@ def winning_screen(kleur):
         clock.tick(10)
 
 
+def TailList(aantal):
+    if aantal == 1:
+        return players.Tail
+    if aantal == 2:
+        return players.Tail.Tail
+
+
+def Bepaal_beurt(List, kleur, length, levend):
+    if kleur == 9 or kleur == 6:
+        return List
+    elif kleur == 8:
+        if 9 in levend:
+            return TailList(length - 1)
+        else:
+            return List
+    else:
+        if 6 in levend and 8 in levend:
+            return TailList(length - 2)
+        return List
+
 ##Loops
 def game_intro():
     pygame.mixer.music.load("Content/Rocky Theme Tune (8 Bit Remix).mp3")
