@@ -34,7 +34,10 @@ camera2 = pygame.Rect(20, 700, 500, 180)
 camera3 = pygame.Rect(700, 20, 280, 660)
 camera4 = pygame.Rect(700, 700, 280, 180)
 camera5 = pygame.Rect(103, 280, 230, 30)
+camera6 = pygame.Rect(103, 350, 230, 30)
+camera7 = pygame.Rect(365, 350, 230, 30)
 hp_dict = hp_image()
+cp_dict = cp_image()
 
 mid_camera = pygame.Rect(80, 80, 539, 539)
 mid_starter = pygame.Rect(95, 95, 244, 510)
@@ -395,8 +398,12 @@ def Fight(starter, target):
     canvas.fill((255, 255, 255), mid_starter)
     canvas.blit(starter.FaceTexture, (115, 120))
     canvas.blit(hp_dict["HP_{}".format(starter.Levenspunten)], (103, 280))
+    canvas.blit(cp_dict["CP_{}".format(starter.Conditie)], (103, 350))
     if target.Value.Player:
             canvas.blit(hp_dict["HP_{}".format(target.Value.Levenspunten)], (365, 280))
+            if target.Value.Conditie < 0:
+                target.Value.Conditie = 0
+            canvas.blit(cp_dict["CP_{}".format(target.Value.Conditie)], (365, 350))
     print_players(1, 1, 1, 1)
     pygame.display.update(camera1)
 
@@ -699,54 +706,34 @@ def Return_bepaalde_player(tile_kleur):
         return player3
     else:
         return player4
-        
 
-def winning_screen(kleur):
-    global pause
+## Dood process
+def Dead(player_kleur):
+    global beurt, players
+    List = It_remove_dead(players, player_kleur)
+    players = List  # Turn_list(List)
+    length, kleuren = lengthNamen(players)
+    death_screen(player_kleur, 30)
+    beurt = Bepaal_beurt(players, player_kleur, length, kleuren)
 
-    canvas.fill(white, mid_camera)
 
-    if kleur == 6:
-        b = pygame.image.load("content/__pawn_green.png")
-        b = pygame.transform.scale(b, (175, 175))
-        canvas.blit(b, (275, 260))
-    elif kleur == 7:
-        y = pygame.image.load("content/__pawn_yellow.png")
-        y = pygame.transform.scale(y, (175, 175))
-        canvas.blit(y, (275, 260))
-    elif kleur == 8:
-        g = pygame.image.load("content/__pawn_blue.png")
-        g = pygame.transform.scale(g, (175, 175))
-        canvas.blit(g, (275, 260))
-    elif kleur == 9:
-        r = pygame.image.load("content/__pawn_red.png")
-        r = pygame.transform.scale(r, (175, 175))
-        canvas.blit(r, (275, 260))
+def It_remove_dead(List, kleur):
+    if List.IsEmpty:
+        return Empty
+    elif List.Value.Kleur == kleur:
+        return It_remove_dead(List.Tail, kleur)
+    elif List.Value.Kleur != kleur:
+        return Node(List.Value, It_remove_dead(List.Tail, kleur))
 
-    pygame.mixer.music.load("content/soundeffects/winningscreen.wav")
-    pygame.mixer.music.play(0, 0)
-    gameExit = False
-    while not gameExit:
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    game_intro()
-
-        largeText = pygame.font.SysFont("comicsansms", 40)
-        TextSurf, TextRect = text_objects("{} is de winnaar!".format(players.Value.Naam), largeText)
-        TextRect.center = ((350), (200))
-        gameDisplay.blit(TextSurf, TextRect)
-
-        button("Play again", 150, 500, 150, 50, green, bright_green, game_loop, "reset")
-        button("Play again", 150, 500, 150, 50, green, bright_green, game_intro)
-        button("Quit Game", 400, 500, 150, 50, red, bright_red, quitgame)
-
-        pygame.display.update(mid_camera)
-        clock.tick(10)
+def lengthNamen(List):
+    count = 0
+    kleuren = []
+    while not List.IsEmpty:
+        count += 1
+        kleuren.append(List.Value.Kleur)
+        List = List.Tail
+    return count, kleuren
 
 ##Loops
 def game_intro():
@@ -994,11 +981,6 @@ def pause_screen():
 
         pygame.display.update(mid_camera)
         clock.tick(15)
-        
-
-def manual():
-    webbrowser.open_new(r'content\Manual.pdf')           
-
 
 def death_screen(kleur, aantal):
     global pause
