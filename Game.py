@@ -33,6 +33,8 @@ camera1 = pygame.Rect(0, 0, 700, 700)
 camera2 = pygame.Rect(20, 700, 500, 180)
 camera3 = pygame.Rect(700, 20, 280, 660)
 camera4 = pygame.Rect(700, 700, 280, 180)
+camera5 = pygame.Rect(103, 280, 230, 30)
+hp_dict = hp_image()
 
 mid_camera = pygame.Rect(80, 80, 539, 539)
 mid_starter = pygame.Rect(95, 95, 244, 510)
@@ -385,7 +387,16 @@ def Fight(starter, target):
     time.sleep(1)
     canvas.fill((0, 0, 0), mid_camera)
     canvas.fill((255, 255, 255), mid_target)
+    largeText = pygame.font.SysFont("calibri", 20)
+    TextSurf, TextRect = text_objects(target.Value.Naam, largeText)
+    TextRect.center = ((display_width / 2.05), (display_height / 8))
+    gameDisplay.blit(TextSurf, TextRect)
+    canvas.blit(target.Value.FaceTexture, (405, 125))
     canvas.fill((255, 255, 255), mid_starter)
+    canvas.blit(starter.FaceTexture, (115, 120))
+    canvas.blit(hp_dict["HP_{}".format(starter.Levenspunten)], (103, 280))
+    if target.Value.Player:
+            canvas.blit(hp_dict["HP_{}".format(target.Value.Levenspunten)], (365, 280))
     print_players(1, 1, 1, 1)
     pygame.display.update(camera1)
 
@@ -656,6 +667,9 @@ def Calc_parameters(starter, target, start_dmg, target_dmg):
     else:
         starter.Levenspunten = starter.Levenspunten - (target_dmg - start_dmg)
         print("Je levenspunten zijn gedaalt naar : {}".format(starter.Levenspunten))
+        canvas.fill((255, 255, 255), camera5)
+        canvas.blit(hp_dict["HP_{}".format(starter.Levenspunten)], (103, 280))
+        pygame.display.update(camera5)
     Change_turn(beurt)
     game_loop(False)
 
